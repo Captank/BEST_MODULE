@@ -97,7 +97,7 @@ class BestController {
 			else{
 				$qls = Array();
 				foreach($items as $item) {
-					$this->interpolate($args, $item);
+					var_dump($this->interpolate($args, $item));
 				}
 			}
 		}
@@ -147,7 +147,7 @@ EOD;
 	public function getItemRequirements($id) {
 		$sql = <<<EOD
 SELECT
-	`ql`, `itemref`, `reqvalues`
+	`ql`, `item_ref`, `reqs`
 FROM
 	`best_requirements`
 WHERE
@@ -155,8 +155,7 @@ WHERE
 ORDER BY
 	`ql` ASC
 EOD;
-		var_dump($id);
-		return $this->db->query($id);
+		return $this->db->query($sql, $id);
 	}
 	
 	/**
@@ -167,8 +166,9 @@ EOD;
 	 */
 	public function getSkill($name) {
 		$name = strtolower($name);
-		if(isset($this->skills[$name]))
+		if(isset($this->skills[$name])) {
 			return $name;
+		}
 			
 		$result = false;
 		foreach($this->skills as $skill => $u) {
@@ -176,7 +176,7 @@ EOD;
 				if($result) {
 					return false;
 				}
-				$result = $name;
+				$result = $skill;
 			}
 		}
 		return $result;
@@ -190,11 +190,54 @@ EOD;
 	 * @return int interpolated QL, false if not possible to calculate.
 	 */
 	public function interpolate($skills, $item) {
-		var_dump($item);
 		$reqsets = $this->getItemRequirements($item->id);
-		var_dump($reqsets);
+		$item->reqs = $this->swapArray(explode(";", $item->reqs));
+		foreach($reqsets as &$set) {
+			$set->reqs = explode(";", $set->reqs);
+		}
+		$result = 9999;
+		foreach($skills as $skill => $value) {
+			if(isset($item->reqs[$skill])) {
+				$ql = $this->interpolateAllReqSets($reqsets, $item->reqs[$skill], $value);
+				if($ql) {
+					$result = min($result, $ql);
+				}
+			}
+		}
+		return $result == 9999 ? false : $result;
 	}
 	
+	public function interpolateAllReqSets($reqsets, $sIdx, $sValue) {
+		$lowId = -1;
+		foreach($reqsets as $req) {
+			if($req->reqs[$sIdx] > $sValue) {
+				break;
+			}
+			$lowId++;
+		}
+		if($lowId<0) {
+			return false;
+		}
+		elseif($lowId == count($reqsets)-1) {
+			return $reqsets[$lowId]->ql;
+		}
+		else {
+			return $this->interpolateFromReqSets($reqsets[$lowId], $reqsets[$lowId+1], $sIdx, $sValue);
+		}
+	}
+
+	/**
+	 * Interpolate the QL by given requirement sets.
+	 *
+	 * @param DBRow $low - lower requirement set
+	 * @param DBRow $high - higher requirement set
+	 * @param int $sIdx - skill representing index of req. set -> reqs[$sIdx]
+	 * @param int $sValue - the skill value to calculate the interpolated QL
+	 * @return int - interpolated QL, if $sValue is even lower than $low->reqs[$sIdx] then false
+	 */
+	public function interpolateFromReqSets($low, $high, $sIdx, $sValue) {
+		return $low->reqs[$sIdx] > $sValue ? false : $this->interpolateSkill($low->ql, $low->reqs[$sIdx], $high->ql, $high->reqs[$sIdx], $sValue);
+	}
 	/**
 	 * Interpolate the QL by given skill
 	 *
@@ -206,6 +249,20 @@ EOD;
 	 * @return int - the interpolated QL
 	 */
 	public function interpolateSkill($lowQL, $lowSkill, $highQL, $highSkill, $skill) {
-		return floor($skill*($highQL-$lowQL)/($highSkill-$lowSkill));
+		return round($lowQL+(($highQL-$lowQL)/($highSkill-$lowSkill))*($skill-$lowSkill));
 	} 
+
+	/**
+	 * Swaps index and keys of an array.
+	 *
+	 * @param array $array - the array
+	 * @return array - array with keys as values and values as keys
+	 */
+	public function swapArray($array) {
+		$tmp = Array();
+		foreach($array as $key => $value) {
+			$tmp[$value] = $key;
+		}
+		return $tmp;
+	}
 }
