@@ -187,7 +187,7 @@ EOD;
 	 *
 	 * @param array $skills - the skills array
 	 * @param DBRow $item - the item
-	 * @return int interpolated QL, false if not possible to calculate.
+	 * @return int interpolated QL and item reference, null if skills are too low, false if skills match.
 	 */
 	public function interpolate($skills, $item) {
 		$reqsets = $this->getItemRequirements($item->id);
@@ -196,17 +196,27 @@ EOD;
 			$set->reqs = explode(";", $set->reqs);
 		}
 		$ii = Array("ql" => 9999);
+		$skillMatched = false;
 		foreach($skills as $skill => $value) {
 			if(isset($item->reqs[$skill])) {
+				$skillMatched = true;
 				$tmp = $this->interpolateAllReqSets($reqsets, $item->reqs[$skill], $value);
 				if($tmp && $tmp["ql"] < $ii["ql"]) {
 					$ii = $tmp;
 				}
 			}
 		}
-		return $ii["ql"] == 9999 ? false : $ii;
+		return $ii["ql"] == 9999 ? ($skillMatched ? null : false) : $ii;
 	}
 	
+	/**
+	 * Calculates the interpolated QL for all given requirement sets.
+	 *
+	 * @param array $reqsets - all requirement sets, must by ordered by QL asc
+	 * @param int $sIdx - index for correct skill
+	 * @param int $sValue - skill value for interpolation
+	 * @return array - interpolated QL and item reference, false if interpolation is invalid
+	 */
 	public function interpolateAllReqSets($reqsets, $sIdx, $sValue) {
 		$lowId = -1;
 		foreach($reqsets as $req) {
@@ -234,7 +244,7 @@ EOD;
 	 * @param DBRow $high - higher requirement set
 	 * @param int $sIdx - skill representing index of req. set -> reqs[$sIdx]
 	 * @param int $sValue - the skill value to calculate the interpolated QL
-	 * @return int - interpolated QL, if $sValue is even lower than $low->reqs[$sIdx] then false
+	 * @return array - interpolated QL and item reference, if $sValue is even lower than $low->reqs[$sIdx] then false
 	 */
 	public function interpolateFromReqSets($low, $high, $sIdx, $sValue) {
 		return $low->reqs[$sIdx] > $sValue ? false : 
