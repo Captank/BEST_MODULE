@@ -88,17 +88,28 @@ class BestController {
 		else {
 			$items = $this->getItems($name);
 			if(!count($items)) {
-				$items = $this->getItems($name);
+				$items = $this->getItems($name, true);
 			}
 			$c = count($items);
 			if($c == 0) {
 				$msg = "Error! Gear <highlight>$name<end> not available.";
 			}
 			else{
-				$qls = Array();
 				foreach($items as $item) {
-					var_dump($this->interpolate($args, $item));
+					$tmp = $this->interpolate($args, $item);
+					$msg[] = sprintf("<tab><highlight>%s<end>: %s", $item->name,
+$tmp === false ? "given skills don't match requirements." :
+	($tmp === null ? "you can't even equipp lowest QL." :
+		$this->text->make_item($tmp["ref_low"], $tmp["ref_high"], $tmp["ql"], $tmp["ql"])));
 				}
+			}
+		}
+		if(is_array($msg)) {
+			if(count($msg) == 1) {
+				$msg = str_replace("<tab>","", array_shift($msg));
+			}
+			else {
+				$msg = $this->text->make_blob(sprintf("Best (%d)", count($msg)), implode("\n", $msg));
 			}
 		}
 		$sendto->reply($msg);
@@ -230,7 +241,7 @@ EOD;
 		}
 		elseif($lowId == count($reqsets)-1) {
 			return Array(	"ql" => $reqsets[$lowId]->ql,
-					"itemref" => $reqsets[$lowId]->item_ref.'/'.$reqsets[$lowId]->item_ref);
+					"ref_low" => $reqsets[$lowId]->item_ref, "ref_high" => $reqsets[$lowId]->item_ref);
 		}
 		else {
 			return $this->interpolateFromReqSets($reqsets[$lowId], $reqsets[$lowId+1], $sIdx, $sValue);
@@ -249,7 +260,7 @@ EOD;
 	public function interpolateFromReqSets($low, $high, $sIdx, $sValue) {
 		return $low->reqs[$sIdx] > $sValue ? false : 
 			Array(	"ql" => $this->interpolateSkill($low->ql, $low->reqs[$sIdx], $high->ql, $high->reqs[$sIdx], $sValue),
-				"itemref" => $low->item_ref.'/'.$high->item_ref);
+				"ref_low" => $low->item_ref, "ref_high" => $high->item_ref);
 	}
 	/**
 	 * Interpolate the QL by given skill
