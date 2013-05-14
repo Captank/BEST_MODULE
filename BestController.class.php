@@ -195,16 +195,16 @@ EOD;
 		foreach($reqsets as &$set) {
 			$set->reqs = explode(";", $set->reqs);
 		}
-		$result = 9999;
+		$ii = Array("ql" => 9999);
 		foreach($skills as $skill => $value) {
 			if(isset($item->reqs[$skill])) {
-				$ql = $this->interpolateAllReqSets($reqsets, $item->reqs[$skill], $value);
-				if($ql) {
-					$result = min($result, $ql);
+				$tmp = $this->interpolateAllReqSets($reqsets, $item->reqs[$skill], $value);
+				if($tmp && $tmp["ql"] < $ii["ql"]) {
+					$ii = $tmp;
 				}
 			}
 		}
-		return $result == 9999 ? false : $result;
+		return $ii["ql"] == 9999 ? false : $ii;
 	}
 	
 	public function interpolateAllReqSets($reqsets, $sIdx, $sValue) {
@@ -219,7 +219,8 @@ EOD;
 			return false;
 		}
 		elseif($lowId == count($reqsets)-1) {
-			return $reqsets[$lowId]->ql;
+			return Array(	"ql" => $reqsets[$lowId]->ql,
+					"itemref" => $reqsets[$lowId]->item_ref.'/'.$reqsets[$lowId]->item_ref);
 		}
 		else {
 			return $this->interpolateFromReqSets($reqsets[$lowId], $reqsets[$lowId+1], $sIdx, $sValue);
@@ -236,7 +237,9 @@ EOD;
 	 * @return int - interpolated QL, if $sValue is even lower than $low->reqs[$sIdx] then false
 	 */
 	public function interpolateFromReqSets($low, $high, $sIdx, $sValue) {
-		return $low->reqs[$sIdx] > $sValue ? false : $this->interpolateSkill($low->ql, $low->reqs[$sIdx], $high->ql, $high->reqs[$sIdx], $sValue);
+		return $low->reqs[$sIdx] > $sValue ? false : 
+			Array(	"ql" => $this->interpolateSkill($low->ql, $low->reqs[$sIdx], $high->ql, $high->reqs[$sIdx], $sValue),
+				"itemref" => $low->item_ref.'/'.$high->item_ref);
 	}
 	/**
 	 * Interpolate the QL by given skill
