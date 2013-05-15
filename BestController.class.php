@@ -29,7 +29,6 @@ class BestController {
 	/** @Inject */
 	public $text;
 	
-	private $skills = Array("strength"=>0, "stamina"=>0, "sense"=>0, "agility"=>0, "intelligence"=>0, "psychic"=>0);
 	
 	/**
 	 * @Setup
@@ -284,7 +283,7 @@ EOD;
 	 * @return int - the interpolated QL
 	 */
 	public function interpolateSkill($lowQL, $lowSkill, $highQL, $highSkill, $skill) {
-		return round($lowQL+(($highQL-$lowQL)/($highSkill-$lowSkill))*($skill-$lowSkill));
+		return floor($lowQL+(($highQL-$lowQL)/($highSkill-$lowSkill))*($skill-$lowSkill));
 	} 
 
 	/**
