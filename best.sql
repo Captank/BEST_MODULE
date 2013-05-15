@@ -48,8 +48,8 @@ INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1,
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 7, 264201, '1045;900');
 
 INSERT INTO `best_items` (`id`, `name`, `reqs`) VALUES (8, 'ofab agent', 'agility;sense');
-INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 7, 264311, '5;4');
-INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 7, 264312, '1045;855');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 8, 264311, '5;4');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 8, 264312, '1045;855');
 
 INSERT INTO `best_items` (`id`, `name`, `reqs`) VALUES (9, 'ofab crat', 'intelligence;psychic');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 9, 264527, '5;4');
@@ -101,7 +101,7 @@ INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (30
 
 -- miy's
 
-INSERT INTO `best_items` (`id`, `name`, `reqs`) VALUES (21, 'miy melee', 'sense:agility');
+INSERT INTO `best_items` (`id`, `name`, `reqs`) VALUES (21, 'miy melee', 'sense;agility');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 21, 268858, '6;5');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 21, 268859, '825;765');
 
