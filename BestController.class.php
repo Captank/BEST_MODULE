@@ -119,7 +119,7 @@ $tmp === false ? "given skills don't match requirements." :
 	 * Get items with a specific name.
 	 * @params string $name - name of item (or sql pattern)
 	 * @params boolean $like - default false, defines if its searched by LIKE '%$name%' instead of = '$name'
-	 * @return returns array of DBRow
+	 * @return array - all found items
 	 */
 	public function getItems($name, $like = false) {
 		$name = strtolower($name);
@@ -146,14 +146,18 @@ WHERE
 	`name` = ?
 EOD;
 		}
-		return $this->db->query($sql, $name);
+		$results = $this->db->query($sql, $name);
+		foreach($results as &$result) {
+			$result->reqs = $this->swapArray(explode(";", $result->reqs));
+		}
+		return $results;
 	}
 	
 	/**
 	 * Get item requirement sets.
 	 *
 	 * @param int $id - item id
-	 * @return array of DBRow - requirement sets.
+	 * @return array - requirement sets.
 	 */
 	public function getItemRequirements($id) {
 		$sql = <<<EOD
@@ -166,7 +170,11 @@ WHERE
 ORDER BY
 	`ql` ASC
 EOD;
-		return $this->db->query($sql, $id);
+		$results = $this->db->query($sql, $id);
+		foreach($results as &$result) {
+			$result->reqs = explode(";", $result->reqs);
+		}
+		return $results;
 	}
 	
 	/**
@@ -202,10 +210,6 @@ EOD;
 	 */
 	public function interpolate($skills, $item) {
 		$reqsets = $this->getItemRequirements($item->id);
-		$item->reqs = $this->swapArray(explode(";", $item->reqs));
-		foreach($reqsets as &$set) {
-			$set->reqs = explode(";", $set->reqs);
-		}
 		$ii = Array("ql" => 9999);
 		$skillMatched = false;
 		foreach($skills as $skill => $value) {
