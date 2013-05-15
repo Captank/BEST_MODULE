@@ -33,7 +33,20 @@ class BestController {
 	public function setup() {
 		$this->db->loadSQLFile($this->moduleName, "best");
 	}
-	
+	/**
+	 * Handler to get a list of available gear.
+	 *
+	 * @HandlesCommand("best")
+	 * @Matches("/^best list$/i")
+	 */
+	public function gearListCommand($message, $channel, $sender, $sendto, $args) {
+		$gear = $this->getItemList();
+		$msg = Array();
+		foreach($gear as $item) {
+			$msg[] = sprintf("<tab>(<highlight>%s<end>): %s", strtoupper($item->name), implode(", ", $item->skills));
+		}
+		$sendto->reply($this->text->make_blob("Gear list (".count($gear).")", implode("<br>",$msg)));
+	}
 	/**
 	 * Handler to calculate gear QLs
 	 *
@@ -295,5 +308,26 @@ EOD;
 			$tmp[$value] = $key;
 		}
 		return $tmp;
+	}
+	/**
+	 * Get gear list
+	 *
+	 * @return arrray - gear list
+	 */
+	public function getItemList() {
+		$sql = <<<EOD
+SELECT
+	`name`, `reqs`
+FROM
+	`best_items`
+ORDER BY
+	`name` ASC;
+EOD;
+		$results = $this->db->query($sql);
+		foreach($results as &$result) {
+			$result->skills = explode(";", $result->reqs);
+			unset($result->reqs);
+		}
+		return $results;
 	}
 }
