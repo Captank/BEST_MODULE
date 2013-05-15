@@ -47,6 +47,22 @@ class BestController {
 		}
 		$sendto->reply($this->text->make_blob("Gear list (".count($gear).")", implode("<br>",$msg)));
 	}
+
+	/**
+	 * Handler to get a list of available skills.
+	 *
+	 * @HandlesCommand("best")
+	 * @Matches("/^best skills$/i")
+	 */
+	public function skillsListCommand($message, $channel, $sender, $sendto, $args) {
+		$skills = $this->getSkillList();
+		$msg = Array();
+		foreach($skills as $skill) {
+			$msg[] = "<tab>".$skill->name;
+		}
+		$sendto->reply($this->text->make_blob("Skill list (".count($skills).")", implode("<br>",$msg)));
+	}
+
 	/**
 	 * Handler to calculate gear QLs
 	 *
@@ -312,7 +328,7 @@ EOD;
 	/**
 	 * Get gear list
 	 *
-	 * @return arrray - gear list
+	 * @return array - gear list
 	 */
 	public function getItemList() {
 		$sql = <<<EOD
@@ -329,5 +345,22 @@ EOD;
 			unset($result->reqs);
 		}
 		return $results;
+	}
+
+	/**
+	 * Get skill list
+	 *
+	 * @return array - skill list
+	 */
+	public function getSkillList() {
+		$sql = <<<EOD
+SELECT
+	`name`
+FROM
+	`best_skills`
+ORDER BY
+	`name` ASC;
+EOD;
+		return $this->db->query($sql);
 	}
 }
