@@ -8,19 +8,16 @@ namespace Budabot\User\Modules;
  *
  * @Instance
  *
- *	@DefineCommand(
- *		command     = 'best',
- *		accessLevel = 'all',
- *		description = 'Finds the highest ql you can wear',
- *		help        = 'best.txt'
- *	)
+ * @DefineCommand(
+ *	command     = 'best',
+ *	accessLevel = 'all',
+ *	description = 'Finds the highest ql you can wear',
+ *	help        = 'best.txt'
+ * )
  *
  */
 class BestController {
-	/**
-	 * Name of the module.
-	 * Set automatically by module loader.
-	 */
+
 	public $moduleName;
 	
 	/** @Inject */
@@ -93,7 +90,7 @@ class BestController {
 			else{
 				foreach($items as $item) {
 					$tmp = $this->interpolate($args, $item);
-					$msg[] = sprintf("<tab><highlight>%s<end>: %s", $tmp ? $this->getItemName($tmp["ref_low"], $tmp["ref_high"], $item->name) : strtoupper($item->name),
+					$msg[] = sprintf("<tab>(<highlight>%s<end>): %s", strtoupper($item->name),
 $tmp === false ? "given skills don't match requirements." :
 	($tmp === null ? "you can't even equipp lowest QL." :
 		$this->text->make_item($tmp["ref_low"], $tmp["ref_high"], $tmp["ql"], "QL".$tmp["ql"])));
@@ -298,27 +295,5 @@ EOD;
 			$tmp[$value] = $key;
 		}
 		return $tmp;
-	}
-
-	/**
-	 * Generates the correct name for item.
-	 *
-	 * @param int $low - low id of item reference
-	 * @param int $high - high id of item reference
-	 * @param string $falllback - fallback name of item
-	 * @return string - item name
-	 */
-	public function getItemName($low, $high, $fallback) {
-		$sql = <<<EOD
-SELECT
-	`name`
-FROM
-	`aodb`
-WHERE
-	`lowid` = ? AND `highid` = ?
-LIMIT 1;
-EOD;
-		$name = $this->db->query($sql, $low, $high);
-		return count($name) ? sprintf("(%s) %s", strtoupper($fallback), $name[0]->name) : strtoupper($fallback);
 	}
 }
