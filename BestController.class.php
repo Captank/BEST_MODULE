@@ -29,9 +29,6 @@ class BestController {
 	/** @Inject */
 	public $text;
 	
-	/** @Inject */
-	public $util;
-	
 	private $skills = Array("strength"=>0, "stamina"=>0, "sense"=>0, "agility"=>0, "intelligence"=>0, "psychic"=>0);
 	
 	/**
@@ -178,27 +175,37 @@ EOD;
 	}
 	
 	/**
-	 *	Get the full name of the skill pattern.
+	 * Get the full name of the skill pattern.
 	 *
 	 * @param string $name skill pattern
 	 * @return string, full name of skill, false if invalid pattern
 	 */
 	public function getSkill($name) {
+		$sql = <<<EOD
+SELECT
+	`name`
+FROM
+	`best_skills`
+WHERE
+	`name` LIKE ?
+EOD;
 		$name = strtolower($name);
-		if(isset($this->skills[$name])) {
-			return $name;
+		$skills = $this->db->query($sql, $name.'%');
+		$c = count($skills);
+		if($c == 0) {
+			return false;
 		}
-			
-		$result = false;
-		foreach($this->skills as $skill => $u) {
-			if($this->util->startsWith($skill, $name)) {
-				if($result) {
-					return false;
+		elseif($c == 1) {
+			return $skills[0]->name;
+		}
+		else {
+			foreach($skills as $skill) {
+				if($skill->name == $name) {
+					return $name;
 				}
-				$result = $skill;
 			}
 		}
-		return $result;
+		return false;
 	}
 	
 	/**
