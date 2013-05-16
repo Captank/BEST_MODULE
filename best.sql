@@ -99,29 +99,29 @@ INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (20, 'ofab trade
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 20, 264281, '5;4');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 20, 264282, '1045;855');
 
--- miy's
+-- Miy's
 
-INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (21, 'miy melee', 'sense;agility', 'miy''s');
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (21, 'miy melee', 'sense;agility', 'miy''s armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 21, 268858, '6;5');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 21, 268859, '825;765');
 
-INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (22, 'miy nano', 'intelligence;psychic', 'miy''s');
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (22, 'miy nano', 'intelligence;psychic', 'miy''s armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 22, 268844, '6;5');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 22, 268845, '825;765');
 
-INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (23, 'miy ranged', 'agility;strength', 'miy''s');
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (23, 'miy ranged', 'agility;strength', 'miy''s armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 23, 268870, '6;5');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 23, 268871, '825;765');
 
-INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (24, 'miy scary', 'intelligence;sense', 'miy''s');
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (24, 'miy scary', 'intelligence;sense', 'miy''s armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 24, 268894, '6;5');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 24, 268895, '825;765');
 
-INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (25, 'miy tank', 'stamina;strength', 'miy''s');
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (25, 'miy tank', 'stamina;strength', 'miy''s armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 25, 268882, '6;5');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 25, 268883, '825;765');
 
--- froob
+-- Froob armor
 
 INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (26, 'carbonum', 'stamina;agility', 'froob armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 26, 162433, '11;8');
@@ -142,3 +142,29 @@ INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (20
 INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (30, 'junkmetal', 'agility;strength', 'froob armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 30, 206684, '10;7');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (200, 30, 206685, '580;476');
+
+-- Alien armor
+
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (31, 'supple', 'agility', 'alien armor');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 31, 246621, '10');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 31, 246622, '1000');
+
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (32, 'strong', 'strength', 'alien armor');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 32, 246615, '10');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 32, 246616, '1000');
+
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (33, 'arithmetic', 'intelligence', 'alien armor');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 33, 246559, '10');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 33, 246560, '1000');
+
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (34, 'observant', 'sense', 'alien armor');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 34, 246591, '10');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 34, 246592, '1000');
+
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (35, 'spiritual', 'psychic', 'alien armor');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 35, 246599, '10');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 35, 246600, '1000');
+
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (36, 'enduring', 'stamina', 'alien armor');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 36, 246579, '10');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 36, 246580, '1000');
