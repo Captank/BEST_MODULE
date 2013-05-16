@@ -13,8 +13,6 @@ CREATE TABLE `best_items` (`id` INT PRIMARY KEY AUTO_INCREMENT, `name` varchar(2
 DROP TABLE IF EXISTS `best_requirements`;
 CREATE TABLE `best_requirements` (`ql` INT, `item_id` INT, `item_ref` INT, `reqs` varchar(255));
 
--- Combined Armor
-
 INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (1, 'cc', 'strength;agility', 'combined armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 1, 246667, '10;10');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 1, 246668, '1000;1000');
@@ -27,11 +25,9 @@ INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (3, 'co', 'intel
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 3, 246679, '10;10');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 3, 246680, '1000;1000');
 
-
 INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (4, 'cp', 'stamina;psychic', 'combined armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 4, 246655, '10;10');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 4, 246656, '1000;1000');
-
 
 INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (5, 'cs', 'intelligence;sense', 'combined armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 5, 246691, '10;10');
@@ -40,8 +36,6 @@ INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (30
 INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (6, 'css', 'agility;sense', 'combined armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 6, 246703, '10;10');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 6, 246704, '1000;1000');
-
--- Ofab Armor
 
 INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (7, 'ofab advy', 'agility;strength', 'ofab armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 7, 264200, '5;4');
@@ -99,8 +93,6 @@ INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (20, 'ofab trade
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 20, 264281, '5;4');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 20, 264282, '1045;855');
 
--- Miy's
-
 INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (21, 'miy melee', 'sense;agility', 'miy''s armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 21, 268858, '6;5');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 21, 268859, '825;765');
@@ -121,8 +113,6 @@ INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (25, 'miy tank',
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 25, 268882, '6;5');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 25, 268883, '825;765');
 
--- Froob armor
-
 INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (26, 'carbonum', 'stamina;agility', 'froob armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 26, 162433, '11;8');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (200, 26, 162434, '580;476');
@@ -142,8 +132,6 @@ INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (20
 INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (30, 'junkmetal', 'agility;strength', 'froob armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 30, 206684, '10;7');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (200, 30, 206685, '580;476');
-
--- Alien armor
 
 INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (31, 'supple', 'agility', 'alien armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 31, 246621, '10');
@@ -168,3 +156,23 @@ INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (30
 INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (36, 'enduring', 'stamina', 'alien armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 36, 246579, '10');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 36, 246580, '1000');
+
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (37, 'nova dillon', 'sense;agility', 'froob buff armor');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 37, 163945, '8;8');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (200, 37, 163946, '511;461');
+
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (38, 'kirch kevlar', 'agility;strength', 'froob buff armor');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 38, 160338, '8;8');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (200, 38, 160339, '526;476');
+
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (39, 'sekutek', 'stamina;strength', 'froob buff armor');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 39, 160391, '8;8');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (200, 39, 160392, '511;461');
+
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (40, 'steel ribbed', 'sense;agility', 'froob armor');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (25, 40, 245929, '75;75');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (200, 40, 245930, '550;550');
+
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (41, 'rhinoman leather', 'stamina;strength', 'froob armor');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 41, 268518, '11;11');
+INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (200, 41, 268519, '701;701');
