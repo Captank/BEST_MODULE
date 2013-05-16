@@ -14,6 +14,12 @@ namespace Budabot\User\Modules;
  *	description = 'Finds the highest ql you can wear',
  *	help        = 'best.txt'
  * )
+ * @DefineCommand(
+ *	command     = 'bestgroup',
+ *	accessLevel = 'all',
+ *	description = 'Finds the highest ql you can wear',
+ *	help        = 'best.txt'
+ * )
  *
  */
 class BestController {
@@ -91,39 +97,14 @@ class BestController {
 	 */
 	public function bestCommand($message, $channel, $sender, $sendto, $args) {
 		$name = $args[1];
-		$args = preg_split("~[^a-z0-9]+~i",$args[2],-1,PREG_SPLIT_NO_EMPTY);
-		$expect = "v";
-		$n = Array();
-		$v = Array();
-		foreach($args as $arg) {
-			if($expect == "v" && preg_match("~^[0-9]+$~", $arg)) {
-				$v[] = $arg;
-				$expect = "n";
-			}
-			elseif($expect == "n" && preg_match("~^[a-z]+$~i", $arg)) {
-				$n[] = $arg;
-				$expect = "v";
+		$params = null;
+		if(!$this->parseSkills($args[2], $params)) {
+			if($args) {
+				$msg = "Error! ".$params;
 			}
 			else {
 				return false;
 			}
-		}
-		$c = count($n);
-		if($c != count($v)) {
-			return false;
-		}
-		$args = Array();
-		$msg = Array();
-		for($i = 0; $i < $c; $i++) {
-			if($skill = $this->getSkill($n[$i])) {
-				$args[$skill] = $v[$i];
-			}
-			else {
-				$msg[] = $n[$i];
-			}
-		}
-		if(count($msg) > 0) {
-			$msg = "Error! Invalid skills: ".implode(", ", $msg);
 		}
 		else {
 			$items = $this->getItems($name);
@@ -136,7 +117,56 @@ class BestController {
 			}
 			else{
 				foreach($items as $item) {
-					$tmp = $this->interpolate($args, $item);
+					$tmp = $this->interpolate($params, $item);
+					$msg[] = sprintf("<tab>(<highlight>%s<end>): %s", strtoupper($item->name),
+								$tmp === false ? "given skills don't match requirements." :
+									($tmp === null ? "you can't even equipp lowest QL." :
+										$this->text->make_item($tmp["ref_low"], $tmp["ref_high"], $tmp["ql"], "QL".$tmp["ql"])));
+				}
+			}
+		}
+		if(is_array($msg)) {
+			if(count($msg) == 1) {
+				$msg = str_replace("<tab>","", array_shift($msg));
+			}
+			else {
+				$msg = $this->text->make_blob(sprintf("Best (%d)", count($msg)), implode("\n", $msg));
+			}
+		}
+		$sendto->reply($msg);
+	}
+	
+	/**
+	 * Handler to calculate gear QLs
+	 *
+	 * @HandlesCommand("bestgroup")
+	 * @Matches("/^bestgroup ([a-z]+) (.+)$/i")
+	 * @Matches("/^bestgroup '([^']+)' (.+)$/i")
+	 * @Matches('/^bestgroup "([^']+)" (.+)$/i')
+	 */
+	public function bestGroupCommand($message, $channel, $sender, $sendto, $args) {
+		$name = $args[1];
+		$params = null;
+		if(!$this->parseSkills($args[2], $params)) {
+			if($args) {
+				$msg = "Error! ".$params;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			$items = $this->getItemsByGroup($name);
+			if(!count($items)) {
+				$items = $this->getItemsByGroup($name, true);
+			}
+			$c = count($items);
+			if($c == 0) {
+				$msg = "Error! Gear <highlight>$name<end> not available.";
+			}
+			else{
+				foreach($items as $item) {
+					$tmp = $this->interpolate($params, $item);
 					$msg[] = sprintf("<tab>(<highlight>%s<end>): %s", strtoupper($item->name),
 								$tmp === false ? "given skills don't match requirements." :
 									($tmp === null ? "you can't even equipp lowest QL." :
@@ -157,6 +187,7 @@ class BestController {
 	
 	/**
 	 * Get items with a specific name.
+	 *
 	 * @params string $name - name of item (or sql pattern)
 	 * @params boolean $like - default false, defines if its searched by LIKE '%$name%' instead of = '$name'
 	 * @return array - all found items
@@ -167,26 +198,69 @@ class BestController {
 			$name = "%$name%";
 			$sql = <<<EOD
 SELECT
-	`id`,`name`,`reqs`
+	`id`,`name`,`reqs`, `group`
 FROM
 	`best_items`
 WHERE
 	`name` LIKE ?
 ORDER BY
-	`name` ASC
+	`group` ASC, `name` ASC
 EOD;
 		}
 		else {
 			$sql = <<<EOD
 SELECT
-	`id`,`name`,`reqs`
+	`id`,`name`,`reqs`, `group`
 FROM
 	`best_items`
 WHERE
 	`name` = ?
+ORDER BY
+	`group` ASC, `name` ASC
 EOD;
 		}
 		$results = $this->db->query($sql, $name);
+		foreach($results as &$result) {
+			$result->reqs = $this->swapArray(explode(";", $result->reqs));
+		}
+		return $results;
+	}
+	
+	/**
+	 * Get items by group name.
+	 *
+	 * @params string $group - name of item group
+	 * @params boolean $like - default false, defines if its searched by LIKE '%$group%' instead of = 'group'
+	 * @return array - all found items
+	 */
+	public function getItemsByGroup($group, $like = false) {
+		$group = strtolower($group);
+		if($like){
+			$group = "%$group%";
+			$sql = <<<EOD
+SELECT
+	`id`,`name`,`reqs`, `group`
+FROM
+	`best_items`
+WHERE
+	`group` LIKE ?
+ORDER BY
+	`group` ASC, `name` ASC
+EOD;
+		}
+		else {
+			$sql = <<<EOD
+SELECT
+	`id`,`name`,`reqs`, `group`
+FROM
+	`best_items`
+WHERE
+	`group` = ?
+ORDER BY
+	`group` ASC, `name` ASC
+EOD;
+		}
+		$results = $this->db->query($sql, $group);
 		foreach($results as &$result) {
 			$result->reqs = $this->swapArray(explode(";", $result->reqs));
 		}
@@ -380,5 +454,53 @@ ORDER BY
 	`group` ASC, `name` ASC;
 EOD;
 		return $this->db->query($sql);
+	}
+	
+	/**
+	 * Parses skills.
+	 *
+	 * @param string $args - skill list argument
+	 * @param mixed &$out - either the argument list or an error message, false if syntax error
+	 * @return boolean - true if argument list is valid
+	 */
+	public function parseSkills($args, &$out) {
+		$args = preg_split("~[^a-z0-9]+~i",$args,-1,PREG_SPLIT_NO_EMPTY);
+		$expect = "v";
+		$n = Array();
+		$v = Array();
+		foreach($args as $arg) {
+			if($expect == "v" && preg_match("~^[0-9]+$~", $arg)) {
+				$v[] = $arg;
+				$expect = "n";
+			}
+			elseif($expect == "n" && preg_match("~^[a-z]+$~i", $arg)) {
+				$n[] = $arg;
+				$expect = "v";
+			}
+			else {
+				$out = false;
+				return false;
+			}
+		}
+		$c = count($n);
+		if($c != count($v)) {
+			$out = false;
+			return false;
+		}
+		$out = Array();
+		$msg = Array();
+		for($i = 0; $i < $c; $i++) {
+			if($skill = $this->getSkill($n[$i])) {
+				$out[$skill] = $v[$i];
+			}
+			else {
+				$msg[] = $n[$i];
+			}
+		}
+		if(count($msg) > 0) {
+			$out = "Invalid skills: ".implode(", ", $msg);
+			return false;
+		}
+		return true;
 	}
 }
