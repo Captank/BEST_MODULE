@@ -122,7 +122,8 @@ class BestController {
 					$msg = str_replace("<br>"," ", $msg);
 					$msg = str_replace("<tab>"," ", $msg);
 					$msg = preg_replace('~^\s+~', '', $msg);
-					$msg = preg_replace('~\s+', ' ', $msg);
+					$msg = preg_replace('~\s+~', ' ', $msg);
+					$msg = preg_replace('~^\[.+\][^a-z]+~i','', $msg);
 				}
 				else {
 					$msg = $this->text->make_blob(sprintf("Best (%d)", count($items)), $msg);
@@ -167,7 +168,8 @@ class BestController {
 					$msg = str_replace("<br>"," ", $msg);
 					$msg = str_replace("<tab>"," ", $msg);
 					$msg = preg_replace('~^\s+~', '', $msg);
-					$msg = preg_replace('~\s+', ' ', $msg);
+					$msg = preg_replace('~\s+~', ' ', $msg);
+					$msg = preg_replace('~^\[.+\][^a-z]+~i','', $msg);
 				}
 				else {
 					$msg = $this->text->make_blob(sprintf("Best (%d)", count($items)), $msg);
@@ -190,7 +192,7 @@ class BestController {
 			$name = "%$name%";
 			$sql = <<<EOD
 SELECT
-	`id`,`name`,`reqs`, `group`
+	`id`,`name`,`reqs`, `group`, `qllimits`
 FROM
 	`best_items`
 WHERE
@@ -202,7 +204,7 @@ EOD;
 		else {
 			$sql = <<<EOD
 SELECT
-	`id`,`name`,`reqs`, `group`
+	`id`,`name`,`reqs`, `group`, `qllimits`
 FROM
 	`best_items`
 WHERE
@@ -214,6 +216,9 @@ EOD;
 		$results = $this->db->query($sql, $name);
 		foreach($results as &$result) {
 			$result->reqs = $this->swapArray(explode(";", $result->reqs));
+			if($result->qllimits) {
+				$result->qllimits = explode(";", $result->qllimits);
+			}
 		}
 		return $results;
 	}
@@ -231,7 +236,7 @@ EOD;
 			$group = "%$group%";
 			$sql = <<<EOD
 SELECT
-	`id`,`name`,`reqs`, `group`
+	`id`,`name`,`reqs`, `group`, `qllimits`
 FROM
 	`best_items`
 WHERE
@@ -243,7 +248,7 @@ EOD;
 		else {
 			$sql = <<<EOD
 SELECT
-	`id`,`name`,`reqs`, `group`
+	`id`,`name`,`reqs`, `group`, `qllimits`
 FROM
 	`best_items`
 WHERE
@@ -255,6 +260,9 @@ EOD;
 		$results = $this->db->query($sql, $group);
 		foreach($results as &$result) {
 			$result->reqs = $this->swapArray(explode(";", $result->reqs));
+			if($result->qllimits) {
+				$result->qllimits = explode(";", $result->qllimits);
+			}
 		}
 		return $results;
 	}
@@ -351,7 +359,17 @@ EOD;
 				}
 			}
 		}
-		return $ii["ql"] == 9999 ? ($skillMatched ? null : false) : $ii;
+		if($ii["ql"] == 9999) {
+			return $skillMatched ? null : false;
+		}
+		elseif($item->qllimits) {
+			if($item->qllimits[0] > $ii["ql"]) {
+				return null;
+			}
+			for($i = count($item->qllimits)-1; $i >= 0 && $ii["ql"] < $item->qllimits[$i]; $i--);
+			$ii["ql"] = $item->qllimits[$i];
+		}
+		return $ii;
 	}
 	
 	/**
