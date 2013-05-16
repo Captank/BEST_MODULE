@@ -132,7 +132,6 @@ class BestController {
 					$msg = str_replace("<tab>"," ", $msg);
 					$msg = preg_replace('~^\s+~', '', $msg);
 					$msg = preg_replace('~\s+~', ' ', $msg);
-					$msg = preg_replace('~^\[.+\][^a-z]+~i','', $msg);
 				}
 				else {
 					$msg = $this->text->make_blob(sprintf("Best (%d)", count($items)), $msg);
@@ -178,7 +177,6 @@ class BestController {
 					$msg = str_replace("<tab>"," ", $msg);
 					$msg = preg_replace('~^\s+~', '', $msg);
 					$msg = preg_replace('~\s+~', ' ', $msg);
-					$msg = preg_replace('~^\[.+\][^a-z]+~i','', $msg);
 				}
 				else {
 					$msg = $this->text->make_blob(sprintf("Best (%d)", count($items)), $msg);
