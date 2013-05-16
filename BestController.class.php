@@ -52,54 +52,50 @@ class BestController {
 	public function setup() {
 		$this->db->loadSQLFile($this->moduleName, "best");
 	}
+
 	/**
-	 * Handler to get a list of available gear.
+	 * Handler to get list of available skills/gear.
 	 *
 	 * @HandlesCommand("best")
-	 * @Matches("/^best gear$/i")
+	 * @Matches("/^best (skills|gear)$/i")
 	 */
-	public function gearListCommand($message, $channel, $sender, $sendto, $args) {
-		$gear = $this->getItemList();
+	public function listCommand($message, $channel, $sender, $sendto, $args) {
 		$groups = Array();
-		foreach($gear as $item) {
-			if(isset($groups[$item->group])) {
-				$groups[$item->group][] = "<tab><highlight>".strtoupper($item->name)."<end>: ".implode(", ", $item->skills);
+		$args[1] = strtolower($args[1]);
+		if($args[1]=="gear") {
+			$gtoken = "";
+			$itoken = "<br>";
+			$data = $this->getItemList();
+			foreach($data as $d) {
+				$tmp = "<tab><highlight>".strtoupper($d->name)."<end>: ".implode(", ", $d->skills);
+				if(isset($groups[$d->group])) {
+					$groups[$d->group][] = $tmp;
+				}
+				else {
+					$groups[$d->group] = Array($tmp);
+				}
 			}
-			else {
-				$groups[$item->group] = Array("<tab><highlight>".strtoupper($item->name)."<end>: ".implode(", ", $item->skills));
+		}
+		else {
+			$gtoken = "<tab>";
+			$itoken = ", ";
+			$data = $this->getSkillList();
+			foreach($data as $d) {
+				$tmp = ucfirst($d->name);
+				if(isset($groups[$d->group])) {
+					$groups[$d->group][] = $tmp;
+				}
+				else {
+					$groups[$d->group] = Array($tmp);
+				}
 			}
 		}
 		$msg = Array();
 		foreach($groups as $name => $group) {
-			$msg[] = "[<header2>".ucfirst($name)."<end>]<br>".implode("<br>", $group);
+			$msg[] = $gtoken."[<header2>".ucfirst($name)."<end>]<br>".implode($itoken, $group);
 		}
-		$sendto->reply($this->text->make_blob("Gear list (".count($gear).")", implode("<br><br>",$msg)));
+		$sendto->reply($this->text->make_blob(ucfirst($args[1])." (".count($data).")", implode("<br><br>", $msg)));
 	}
-
-	/**
-	 * Handler to get a list of available skills.
-	 *
-	 * @HandlesCommand("best")
-	 * @Matches("/^best skills$/i")
-	 */
-	public function skillsListCommand($message, $channel, $sender, $sendto, $args) {
-		$skills = $this->getSkillList();
-		$groups = Array();
-		foreach($skills as $skill) {
-			if(isset($groups[$skill->group])) {
-				$groups[$skill->group][] = ucfirst($skill->name);
-			}
-			else {
-				$groups[$skill->group] = Array(ucfirst($skill->name));
-			}
-		}
-		$msg = Array();
-		foreach($groups as $name => $group) {
-			$msg[] = "<tab>[<header2>".ucfirst($name)."<end>]<br>".implode(", ", $group);
-		}
-		$sendto->reply($this->text->make_blob("Skill list (".count($skills).")", implode("<br><br>",$msg)));
-	}
-
 	/**
 	 * Handler to calculate gear QLs
 	 *
