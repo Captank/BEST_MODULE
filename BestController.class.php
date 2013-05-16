@@ -91,7 +91,7 @@ class BestController {
 	 * Handler to calculate gear QLs
 	 *
 	 * @HandlesCommand("best")
-	 * @Matches("/^best ([a-z]+) (.+)$/i")
+	 * @Matches("/^best ([a-z%]+) (.+)$/i")
 	 * @Matches("/^best '([^']+)' (.+)$/i")
 	 * @Matches('/^best "([^']+)" (.+)$/i')
 	 */
@@ -115,26 +115,22 @@ class BestController {
 			if($c == 0) {
 				$msg = "Error! Gear <highlight>$name<end> not available.";
 			}
-			else{
-				foreach($items as $item) {
-					$tmp = $this->interpolate($params, $item);
-					$msg[] = sprintf("<tab>(<highlight>%s<end>): %s", strtoupper($item->name),
-								$tmp === false ? "given skills don't match requirements." :
-									($tmp === null ? "you can't even equipp lowest QL." :
-										$this->text->make_item($tmp["ref_low"], $tmp["ref_high"], $tmp["ql"], "QL".$tmp["ql"])));
+			else {
+				$results = $this->interpolate($params, $items);
+				$msg = $this->formatResults($results);
+				if(count($items) == 1) {
+					$msg = str_replace("<br>"," ", $msg);
+					$msg = str_replace("<tab>"," ", $msg);
+					$msg = preg_replace('~^\s+~', '', $msg);
+					$msg = preg_replace('~\s+', ' ', $msg);
+				}
+				else {
+					$msg = $this->text->make_blob(sprintf("Best (%d)", count($items)), $msg);
 				}
 			}
 		}
-		if(is_array($msg)) {
-			if(count($msg) == 1) {
-				$msg = str_replace("<tab>","", array_shift($msg));
-			}
-			else {
-				$msg = $this->text->make_blob(sprintf("Best (%d)", count($msg)), implode("\n", $msg));
-			}
-		}
 		$sendto->reply($msg);
-	}
+	}         
 	
 	/**
 	 * Handler to calculate gear QLs
@@ -164,22 +160,18 @@ class BestController {
 			if($c == 0) {
 				$msg = "Error! Gear <highlight>$name<end> not available.";
 			}
-			else{
-				foreach($items as $item) {
-					$tmp = $this->interpolate($params, $item);
-					$msg[] = sprintf("<tab>(<highlight>%s<end>): %s", strtoupper($item->name),
-								$tmp === false ? "given skills don't match requirements." :
-									($tmp === null ? "you can't even equipp lowest QL." :
-										$this->text->make_item($tmp["ref_low"], $tmp["ref_high"], $tmp["ql"], "QL".$tmp["ql"])));
-				}
-			}
-		}
-		if(is_array($msg)) {
-			if(count($msg) == 1) {
-				$msg = str_replace("<tab>","", array_shift($msg));
-			}
 			else {
-				$msg = $this->text->make_blob(sprintf("Best (%d)", count($msg)), implode("\n", $msg));
+				$results = $this->interpolate($params, $items);
+				$msg = $this->formatResults($results);
+				if(count($items) == 1) {
+					$msg = str_replace("<br>"," ", $msg);
+					$msg = str_replace("<tab>"," ", $msg);
+					$msg = preg_replace('~^\s+~', '', $msg);
+					$msg = preg_replace('~\s+', ' ', $msg);
+				}
+				else {
+					$msg = $this->text->make_blob(sprintf("Best (%d)", count($items)), $msg);
+				}
 			}
 		}
 		$sendto->reply($msg);
@@ -326,13 +318,27 @@ EOD;
 	}
 	
 	/**
+	 * Interpolate all items.
+	 *
+	 * @param array $skills - the skills array
+	 * @param array $items - all items
+	 * @return array - interpolation results
+	 */
+	public function interpolate($skills, $items) {
+		foreach($items as &$item) {
+			$item->interpolation = $this->interpolateItem($skills, $item);
+		}
+		return $items;
+	}
+	
+	/**
 	 * Get interpolated QL for an item by given skills.
 	 *
 	 * @param array $skills - the skills array
 	 * @param DBRow $item - the item
 	 * @return int interpolated QL and item reference, null if skills are too low, false if skills match.
 	 */
-	public function interpolate($skills, $item) {
+	public function interpolateItem($skills, $item) {
 		$reqsets = $this->getItemRequirements($item->id);
 		$ii = Array("ql" => 9999);
 		$skillMatched = false;
@@ -502,5 +508,42 @@ EOD;
 			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * Formats interpolation results.
+	 *
+	 * @param array $items - interpolation results
+	 * @return string - formatted output.
+	 */
+	public function formatResults($items) {
+		$sorted = Array("ok" => Array(), "tolow" => Array(), "noskills" => Array());
+		
+		foreach($items as $item) {
+			if($item->interpolation) {
+				$tmp = sprintf("<br><tab>%s: %s",
+					strtoupper($item->name), $this->text->make_item($item->interpolation["ref_low"], $item->interpolation["ref_high"], $item->interpolation["ql"], "QL".$item->interpolation["ql"]));
+				if(isset($sorted["ok"][$item->group])) {
+					$sorted["ok"][$item->group][] = $tmp;
+				}
+				else {
+					$sorted["ok"][$item->group] = Array($tmp);
+				}
+			}
+			else {
+				$sorted[$item->interpolation === null ? "tolow" : "noskills"][] = strtoupper($item->name);
+			}
+		}
+		$msg = Array();
+		foreach($sorted["ok"] as $name => $group) {
+			$msg[] = "[<highlight>".ucfirst($name)."<end>]".implode("", $group);
+		}
+		if(count($sorted["tolow"])) {
+			$msg[] = "<tab><highlight>You can't even equipp lowest QL<end>:<br>".implode(", ", $sorted["tolow"]);
+		}
+		if(count($sorted["noskills"])) {
+			$msg[] = "<tab><highlight>Given skills don't match requirements<end>:<br>".implode(", ", $sorted["noskills"]);
+		}
+		return implode("<br><br>", $msg);
 	}
 }
