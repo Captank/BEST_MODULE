@@ -71,7 +71,7 @@ class BestController {
 		}
 		$msg = Array();
 		foreach($groups as $name => $group) {
-			$msg[] = "[".ucfirst($name)."]<br>".implode("<br>", $group);
+			$msg[] = "[<header2>".ucfirst($name)."<end>]<br>".implode("<br>", $group);
 		}
 		$sendto->reply($this->text->make_blob("Gear list (".count($gear).")", implode("<br><br>",$msg)));
 	}
@@ -95,7 +95,7 @@ class BestController {
 		}
 		$msg = Array();
 		foreach($groups as $name => $group) {
-			$msg[] = "<tab><highlight>[".ucfirst($name)."]<end><br>".implode(", ", $group);
+			$msg[] = "<tab>[<header2>".ucfirst($name)."<end>]<br>".implode(", ", $group);
 		}
 		$sendto->reply($this->text->make_blob("Skill list (".count($skills).")", implode("<br><br>",$msg)));
 	}
@@ -525,8 +525,8 @@ EOD;
 			return false;
 		}
 		$out = Array();
-		$msg = Array();
-		for($i = 0; $i < $c; $i++) {
+	 	$msg = Array();
+ 		for($i = 0; $i < $c; $i++) {
 			if($skill = $this->getSkill($n[$i])) {
 				$out[$skill] = $v[$i];
 			}
@@ -540,7 +540,7 @@ EOD;
 		}
 		return true;
 	}
-	
+  	
 	/**
 	 * Formats interpolation results.
 	 *
@@ -552,7 +552,7 @@ EOD;
 		
 		foreach($items as $item) {
 			if($item->interpolation) {
-				$tmp = sprintf("<br><tab>%s: %s",
+			$tmp = sprintf("<br><tab><highlight>%s<end>: %s",
 					strtoupper($item->name), $this->text->make_item($item->interpolation["ref_low"], $item->interpolation["ref_high"], $item->interpolation["ql"], "QL".$item->interpolation["ql"]));
 				if(isset($sorted["ok"][$item->group])) {
 					$sorted["ok"][$item->group][] = $tmp;
@@ -567,13 +567,13 @@ EOD;
 		}
 		$msg = Array();
 		foreach($sorted["ok"] as $name => $group) {
-			$msg[] = "[<highlight>".ucfirst($name)."<end>]".implode("", $group);
+			$msg[] = "[<header2>".ucfirst($name)."<end>]".implode("", $group);
 		}
 		if(count($sorted["tolow"])) {
-			$msg[] = "<tab><highlight>You can't even equipp lowest QL<end>:<br>".implode(", ", $sorted["tolow"]);
+			$msg[] = "<tab><header2>You can't even equipp lowest QL<end>:<br>".implode(",<tab>", $sorted["tolow"]);
 		}
 		if($this->settingManager->get("show_no_skills") && count($sorted["noskills"])) {
-			$msg[] = "<tab><highlight>Given skills don't match requirements<end>:<br>".implode(", ", $sorted["noskills"]);
+			$msg[] = "<tab><header2>Given skills don't match requirements<end>:<br>".implode(",<tab>", $sorted["noskills"]);
 		}
 		return implode("<br><br>", $msg);
 	}
