@@ -99,7 +99,7 @@ class BestController {
 		$name = $args[1];
 		$params = null;
 		if(!$this->parseSkills($args[2], $params)) {
-			if($args) {
+			if($params) {
 				$msg = "Error! ".$params;
 			}
 			else {
@@ -144,7 +144,7 @@ class BestController {
 		$name = $args[1];
 		$params = null;
 		if(!$this->parseSkills($args[2], $params)) {
-			if($args) {
+			if($params) {
 				$msg = "Error! ".$params;
 			}
 			else {
