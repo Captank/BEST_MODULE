@@ -41,11 +41,20 @@ class BestController {
 	 */
 	public function gearListCommand($message, $channel, $sender, $sendto, $args) {
 		$gear = $this->getItemList();
-		$msg = Array();
+		$groups = Array();
 		foreach($gear as $item) {
-			$msg[] = sprintf("<tab>(<highlight>%s<end>): %s", strtoupper($item->name), implode(", ", $item->skills));
+			if(isset($groups[$item->group])) {
+				$groups[$item->group][] = "<tab><highlight>".strtoupper($item->name)."<end>: ".implode(", ", $item->skills);
+			}
+			else {
+				$groups[$item->group] = Array("<tab><highlight>".strtoupper($item->name)."<end>: ".implode(", ", $item->skills));
+			}
 		}
-		$sendto->reply($this->text->make_blob("Gear list (".count($gear).")", implode("<br>",$msg)));
+		$msg = Array();
+		foreach($groups as $name => $group) {
+			$msg[] = "[".ucfirst($name)."]<br>".implode("<br>", $group);
+		}
+		$sendto->reply($this->text->make_blob("Gear list (".count($gear).")", implode("<br><br>",$msg)));
 	}
 
 	/**
@@ -342,11 +351,11 @@ EOD;
 	public function getItemList() {
 		$sql = <<<EOD
 SELECT
-	`name`, `reqs`
+	`name`, `reqs`, `group`
 FROM
 	`best_items`
 ORDER BY
-	`name` ASC;
+	`group` ASC, `name` ASC;
 EOD;
 		$results = $this->db->query($sql);
 		foreach($results as &$result) {
@@ -368,7 +377,7 @@ SELECT
 FROM
 	`best_skills`
 ORDER BY
-	`name` ASC;
+	`group` ASC, `name` ASC;
 EOD;
 		return $this->db->query($sql);
 	}
