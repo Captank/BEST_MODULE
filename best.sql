@@ -13,27 +13,27 @@ CREATE TABLE `best_items` (`id` INT PRIMARY KEY AUTO_INCREMENT, `name` varchar(2
 DROP TABLE IF EXISTS `best_requirements`;
 CREATE TABLE `best_requirements` (`ql` INT, `item_id` INT, `item_ref` INT, `reqs` varchar(255));
 
-INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (1, 'cc', 'strength;agility', 'combined armor');
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (1, 'cc', 'strength;agility', 'combined alien armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 1, 246667, '10;10');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 1, 246668, '1000;1000');
 
-INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (2, 'cm', 'strength;stamina', 'combined armor');
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (2, 'cm', 'strength;stamina', 'combined alien armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 2, 246645, '10;10');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 2, 246646, '1000;1000');
 
-INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (3, 'co', 'intelligence;psychic', 'combined armor');
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (3, 'co', 'intelligence;psychic', 'combined alien armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 3, 246679, '10;10');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 3, 246680, '1000;1000');
 
-INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (4, 'cp', 'stamina;psychic', 'combined armor');
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (4, 'cp', 'stamina;psychic', 'combined alien armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 4, 246655, '10;10');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 4, 246656, '1000;1000');
 
-INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (5, 'cs', 'intelligence;sense', 'combined armor');
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (5, 'cs', 'intelligence;sense', 'combined alien armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 5, 246691, '10;10');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 5, 246692, '1000;1000');
 
-INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (6, 'css', 'agility;sense', 'combined armor');
+INSERT INTO `best_items` (`id`, `name`, `reqs`, `group`) VALUES (6, 'css', 'agility;sense', 'combined alien armor');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (1, 6, 246703, '10;10');
 INSERT INTO `best_requirements` (`ql`, `item_id`, `item_ref`, `reqs`) VALUES (300, 6, 246704, '1000;1000');
 
