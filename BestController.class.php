@@ -30,8 +30,21 @@ class BestController {
 	public $db;
 	
 	/** @Inject */
-	public $text;
+	public $settingManager;
 	
+	/** @Inject */
+	public $text;
+		
+	/**
+	 * @Setting("show_no_skills")
+	 * @Description("List gear with no matching skills")
+	 * @Visibility("edit")
+	 * @Type("options")
+	 * @Options("true;false")
+	 * @Intoptions("1;0")
+	 * @AccessLevel("mod")
+	 */
+	public $showNoSkills = "1";	
 	
 	/**
 	 * @Setup
@@ -137,7 +150,7 @@ class BestController {
 	 * Handler to calculate gear QLs
 	 *
 	 * @HandlesCommand("bestgroup")
-	 * @Matches("/^bestgroup ([a-z]+) (.+)$/i")
+	 * @Matches("/^bestgroup ([a-z%]+) (.+)$/i")
 	 * @Matches("/^bestgroup '([^']+)' (.+)$/i")
 	 * @Matches('/^bestgroup "([^']+)" (.+)$/i')
 	 */
@@ -559,7 +572,7 @@ EOD;
 		if(count($sorted["tolow"])) {
 			$msg[] = "<tab><highlight>You can't even equipp lowest QL<end>:<br>".implode(", ", $sorted["tolow"]);
 		}
-		if(count($sorted["noskills"])) {
+		if($this->settingManager->get("show_no_skills") && count($sorted["noskills"])) {
 			$msg[] = "<tab><highlight>Given skills don't match requirements<end>:<br>".implode(", ", $sorted["noskills"]);
 		}
 		return implode("<br><br>", $msg);
