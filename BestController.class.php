@@ -56,11 +56,20 @@ class BestController {
 	 */
 	public function skillsListCommand($message, $channel, $sender, $sendto, $args) {
 		$skills = $this->getSkillList();
-		$msg = Array();
+		$groups = Array();
 		foreach($skills as $skill) {
-			$msg[] = "<tab>".$skill->name;
+			if(isset($groups[$skill->group])) {
+				$groups[$skill->group][] = ucfirst($skill->name);
+			}
+			else {
+				$groups[$skill->group] = Array(ucfirst($skill->name));
+			}
 		}
-		$sendto->reply($this->text->make_blob("Skill list (".count($skills).")", implode("<br>",$msg)));
+		$msg = Array();
+		foreach($groups as $name => $group) {
+			$msg[] = "<tab><highlight>[".ucfirst($name)."]<end><br>".implode(", ", $group);
+		}
+		$sendto->reply($this->text->make_blob("Skill list (".count($skills).")", implode("<br><br>",$msg)));
 	}
 
 	/**
@@ -120,9 +129,9 @@ class BestController {
 				foreach($items as $item) {
 					$tmp = $this->interpolate($args, $item);
 					$msg[] = sprintf("<tab>(<highlight>%s<end>): %s", strtoupper($item->name),
-$tmp === false ? "given skills don't match requirements." :
-	($tmp === null ? "you can't even equipp lowest QL." :
-		$this->text->make_item($tmp["ref_low"], $tmp["ref_high"], $tmp["ql"], "QL".$tmp["ql"])));
+								$tmp === false ? "given skills don't match requirements." :
+									($tmp === null ? "you can't even equipp lowest QL." :
+										$this->text->make_item($tmp["ref_low"], $tmp["ref_high"], $tmp["ql"], "QL".$tmp["ql"])));
 				}
 			}
 		}
@@ -355,7 +364,7 @@ EOD;
 	public function getSkillList() {
 		$sql = <<<EOD
 SELECT
-	`name`
+	`name`, `group`
 FROM
 	`best_skills`
 ORDER BY

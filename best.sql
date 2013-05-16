@@ -1,11 +1,11 @@
 DROP TABLE IF EXISTS `best_skills`;
-CREATE TABLE `best_skills` (`name` varchar(25) PRIMARY KEY);
-INSERT INTO `best_skills` (`name`) VALUES ('strength');
-INSERT INTO `best_skills` (`name`) VALUES ('stamina');
-INSERT INTO `best_skills` (`name`) VALUES ('sense');
-INSERT INTO `best_skills` (`name`) VALUES ('agility');
-INSERT INTO `best_skills` (`name`) VALUES ('intelligence');
-INSERT INTO `best_skills` (`name`) VALUES ('psychic');
+CREATE TABLE `best_skills` (`name` varchar(25) PRIMARY KEY, `group` varchar(25));
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('strength', 'abilities');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('stamina', 'abilities');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('sense', 'abilities');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('agility', 'abilities');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('intelligence', 'abilities');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('psychic', 'abilities');
 
 DROP TABLE IF EXISTS `best_items`;
 CREATE TABLE `best_items` (`id` INT PRIMARY KEY AUTO_INCREMENT, `name` varchar(25), `reqs` varchar(255));
