@@ -126,15 +126,16 @@ class BestController {
 			}
 			else {
 				$results = $this->interpolate($params, $items);
-				$msg = $this->formatResults($results);
-				if(count($items) == 1) {
+				$count = 0;
+				$msg = $this->formatResults($results, $count);
+				if($count == 1) {
 					$msg = str_replace("<br>"," ", $msg);
 					$msg = str_replace("<tab>"," ", $msg);
 					$msg = preg_replace('~^\s+~', '', $msg);
 					$msg = preg_replace('~\s+~', ' ', $msg);
 				}
 				else {
-					$msg = $this->text->make_blob(sprintf("Best (%d)", count($items)), $msg);
+					$msg = $this->text->make_blob("Best ($count)", $msg);
 				}
 			}
 		}
@@ -171,15 +172,16 @@ class BestController {
 			}
 			else {
 				$results = $this->interpolate($params, $items);
-				$msg = $this->formatResults($results);
-				if(count($items) == 1) {
+				$count = 0;
+				$msg = $this->formatResults($results, $count);
+				if($count == 1) {
 					$msg = str_replace("<br>"," ", $msg);
 					$msg = str_replace("<tab>"," ", $msg);
 					$msg = preg_replace('~^\s+~', '', $msg);
 					$msg = preg_replace('~\s+~', ' ', $msg);
 				}
 				else {
-					$msg = $this->text->make_blob(sprintf("Best (%d)", count($items)), $msg);
+					$msg = $this->text->make_blob("Best ($count)", $msg);
 				}
 			}
 		}
@@ -541,13 +543,14 @@ EOD;
 	 * @param array $items - interpolation results
 	 * @return string - formatted output.
 	 */
-	public function formatResults($items) {
+	public function formatResults($items, &$count) {
 		$sorted = Array("ok" => Array(), "tolow" => Array(), "noskills" => Array());
-		
+		$c = Array("ok" => 0, "tolow" => 0, "noskills" => 0);
 		foreach($items as $item) {
 			if($item->interpolation) {
 			$tmp = sprintf("<br><tab><highlight>%s<end>: %s",
 					strtoupper($item->name), $this->text->make_item($item->interpolation["ref_low"], $item->interpolation["ref_high"], $item->interpolation["ql"], "QL".$item->interpolation["ql"]));
+				$c["ok"]++;
 				if(isset($sorted["ok"][$item->group])) {
 					$sorted["ok"][$item->group][] = $tmp;
 				}
@@ -556,7 +559,9 @@ EOD;
 				}
 			}
 			else {
-				$sorted[$item->interpolation === null ? "tolow" : "noskills"][] = strtoupper($item->name);
+				$key = $item->interpolation === null ? "tolow" : "noskills";
+				$c[$key]++;
+				$sorted[$key][] = strtoupper($item->name);
 			}
 		}
 		$msg = Array();
@@ -566,9 +571,14 @@ EOD;
 		if(count($sorted["tolow"])) {
 			$msg[] = "<tab><header2>You can't even equipp lowest QL<end>:<br>".implode(",<tab>", $sorted["tolow"]);
 		}
-		if($this->settingManager->get("show_no_skills") && count($sorted["noskills"])) {
+		if(($this->settingManager->get("show_no_skills") || !count($msg)) && count($sorted["noskills"])) {
 			$msg[] = "<tab><header2>Given skills don't match requirements<end>:<br>".implode(",<tab>", $sorted["noskills"]);
 		}
+		$count = $c["ok"]+$c["tolow"];
+		if($this->settingManager->get("show_no_skills") || !$count) {
+			$count += $c["noskills"];
+		}
+		var_dump($items, $c);
 		return implode("<br><br>", $msg);
 	}
 }
