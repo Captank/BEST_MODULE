@@ -37,7 +37,7 @@ class BestController {
 	 * Handler to get a list of available gear.
 	 *
 	 * @HandlesCommand("best")
-	 * @Matches("/^best list$/i")
+	 * @Matches("/^best gear$/i")
 	 */
 	public function gearListCommand($message, $channel, $sender, $sendto, $args) {
 		$gear = $this->getItemList();
