@@ -1,0 +1,33 @@
+<header2>commands<end>
+<tab><highlight><symbol>best 'name' 'skill list'<end>
+<tab><tab>calculate the QL of gear you can equipp
+<tab><tab>Example: <symbol>best css 500 agi
+
+<tab><highlight><symbol>bestgroup 'name' 'skill list'<end>
+<tab><tab>calculate the QL of all gear in 'group' you can equipp
+<tab><tab>Example: <symbol>best froob buff armor 234 str 276 agility
+
+<tab><highlight><symbol>best gear<end>
+<tab><tab>shows a list of all gear
+
+<tab><highlight><symbol>best skills<end>
+<tab><tab>shows a list of all skills
+
+<header2>explanation<end>
+<tab><highlight>general info<end>
+<tab><tab>The module interpolates the QL of the gear only by given skills. If there are requirements in skills that aren't given, they are ignored.
+<tab><tab>Example: Combined Sharpshooter's gear requires agility and sense, if you give agility in skills list, module expects that you have high enough sense to wear even highest QL and only interpolates for agility.
+
+<tab><highlight>gear and group<end>
+<tab><tab>The module will interpolate for all matching gear/group contains 'name' UNLESS 'name' is equal to any groups/gears name. You can use % as wildcard.
+<tab><tab>Example: '<symbol>best cs 200 agi' will only interpolate for Combined Scout (CS) while '<symbol>best ofab 200 agi' will interpolate for ALL gear which name contains 'ofab' (ofab enf, ofab adv, etc).
+<tab><tab>'<symbol>best c%s 200 agi' will interpolate for Combined Scout (CS), CAS Symbiotic (CAS), Combined Sharpshooter's (CSS) and some more.
+<tab><tab>'<symbol>best cs% 200 agi' will interpolate for Combined Scout (CS), Combined Sharpshooter's (CSS) and maybe some more.
+
+<tab><highlight>skill list<end>
+<tab><tab>Format: 'value' 'skill name' ['value' 'skill name' ['value' 'skill name' [..]]]
+<tab><tab>You can give as many skills and their values as you want (at least it has to be one, of course)
+<tab><tab>'skill name' skill names contain only the letters (a-z) and maybe 1 or 2.
+<tab><tab>you don't have to write the whole skill name, write all letters from start of the skill name, until its clear which skill is meant.
+<tab><tab>Example: 'stamina', 'strength' and 'sense' are thre skill names, 's' would be invalid because it can be any of these. 'se' would be clear to be 'sense', 'st' would be invalid because it can be 'stamina' or 'strength', 'str' is valid for 'strength', 'sta' is valid for 'stamina'
+<tab><tab>For a full list of all available skills do <symbol>best skills.
