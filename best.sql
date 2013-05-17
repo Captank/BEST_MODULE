@@ -7,6 +7,84 @@ INSERT INTO `best_skills` (`name`, `group`) VALUES ('agility', 'abilities');
 INSERT INTO `best_skills` (`name`, `group`) VALUES ('intelligence', 'abilities');
 INSERT INTO `best_skills` (`name`, `group`) VALUES ('psychic', 'abilities');
 
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('martialarts', 'body');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('brawl', 'body');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('dimach', 'body');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('riposte', 'body');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('adventuring', 'body');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('swimming', 'body');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('bodydev', 'body');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('nanopool', 'body');
+
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('1hblunt', 'melee');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('1hedged', 'melee');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('2hblunt', 'melee');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('2hedged', 'melee');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('piercing', 'melee');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('meleeenergy', 'melee');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('parry', 'melee');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('fastattack', 'melee');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('sneakattack', 'melee');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('multimelee', 'melee');
+
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('sharpobject', 'misc weapons');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('grenade', 'misc weapons');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('heavyweapons', 'misc weapons');
+
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('bow', 'ranged');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('pistol', 'ranged');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('smg', 'ranged');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('shotgun', 'ranged');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('assaultrifle', 'ranged');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('rifle', 'ranged');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('rangedenergy', 'ranged');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('flingshot', 'ranged');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('aimshot', 'ranged');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('burst', 'ranged');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('fullauto', 'ranged');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('bowspecial', 'ranged');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('multiranged', 'ranged');
+
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('meleeinit', 'speed');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('rangedinit', 'speed');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('physicalinit', 'speed');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('nanoinit', 'speed');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('dodgeranged', 'speed');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('evadeclsc', 'speed');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('duckexp', 'speed');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('nanoresist', 'speed');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('runspeed', 'speed');
+
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('me', 'tradeskills');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('ee', 'tradeskills');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('qf', 'tradeskills');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('ws', 'tradeskills');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('pharma', 'tradeskills');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('np', 'tradeskills');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('cl', 'tradeskills');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('psychology', 'tradeskills');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('chemistry', 'tradeskills');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('tutoring', 'tradeskills');
+
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('mm', 'nanoskills');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('bm', 'nanoskills');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('pm', 'nanoskills');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('mc', 'nanoskills');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('ts', 'nanoskills');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('si', 'nanoskills');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('firstaid', 'nanoskills');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('treatment', 'nanoskills');
+
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('concealment', 'spying');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('breakandentry', 'spying');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('trapdisarm', 'spying');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('perception', 'spying');
+
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('va', 'navigation');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('vg', 'navigation');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('vw', 'navigation');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('mapnavigation', 'navigation');
+
 DROP TABLE IF EXISTS `best_items`;
 CREATE TABLE `best_items` (`id` INT PRIMARY KEY AUTO_INCREMENT, `name` varchar(25), `reqs` varchar(255), `group` varchar(25), `qllimits` varchar(255));
 
