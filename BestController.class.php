@@ -44,7 +44,7 @@ class BestController {
 	 * @Intoptions("1;0")
 	 * @AccessLevel("mod")
 	 */
-	public $showNoSkills = "1";	
+	public $showNoSkills = "1";
 	
 	/**
 	 * @Setup
@@ -506,7 +506,7 @@ EOD;
 				$v[] = $arg;
 				$expect = "n";
 			}
-			elseif($expect == "n" && preg_match("~^[a-z]+$~i", $arg)) {
+			elseif($expect == "n" && preg_match("~^[a-z12]+$~i", $arg)) {
 				$n[] = $arg;
 				$expect = "v";
 			}
