@@ -100,9 +100,9 @@ class BestController {
 	 * Handler to calculate gear QLs
 	 *
 	 * @HandlesCommand("best")
-	 * @Matches("/^best ([a-z%]+) (.+)$/i")
-	 * @Matches("/^best '([^']+)' (.+)$/i")
-	 * @Matches('/^best "([^']+)" (.+)$/i')
+	 * @Matches("/^best (.+?) (\d+ [a-z12]+.*)$/i")
+	 * @Matches("/^best '([^']+)' (\d+ [a-z12]+.*)$/i")
+	 * @Matches('/^best "([^']+)" (\d+ [a-z12]+.*)$/i')
 	 */
 	public function bestCommand($message, $channel, $sender, $sendto, $args) {
 		$name = $args[1];
@@ -146,9 +146,9 @@ class BestController {
 	 * Handler to calculate gear QLs
 	 *
 	 * @HandlesCommand("bestgroup")
-	 * @Matches("/^bestgroup ([a-z%]+) (.+)$/i")
-	 * @Matches("/^bestgroup '([^']+)' (.+)$/i")
-	 * @Matches('/^bestgroup "([^']+)" (.+)$/i')
+	 * @Matches("/^bestgroup (.+?) (\d+ [a-z12]+.*)$/i")
+	 * @Matches("/^bestgroup '([^']+)' (\d+ [a-z12]+.*)$/i")
+	 * @Matches('/^bestgroup "([^']+)" (\d+ [a-z12]+.*)$/i')
 	 */
 	public function bestGroupCommand($message, $channel, $sender, $sendto, $args) {
 		$name = $args[1];
