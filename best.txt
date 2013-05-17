@@ -27,6 +27,7 @@
 <tab><highlight>skill list<end>
 <tab><tab>Format: 'value' 'skill name' ['value' 'skill name' ['value' 'skill name' [..]]]
 <tab><tab>You can give as many skills and their values as you want (at least it has to be one, of course)
+<tab><tab>Besides the real skills, this module handles some more information as skills as well, for example: level, title level
 <tab><tab>'skill name' skill names contain only the letters (a-z) and maybe 1 or 2.
 <tab><tab>you don't have to write the whole skill name, write all letters from start of the skill name, until its clear which skill is meant.
 <tab><tab>Example: 'stamina', 'strength' and 'sense' are thre skill names, 's' would be invalid because it can be any of these. 'se' would be clear to be 'sense', 'st' would be invalid because it can be 'stamina' or 'strength', 'str' is valid for 'strength', 'sta' is valid for 'stamina'
