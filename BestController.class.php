@@ -285,7 +285,7 @@ EOD;
 	public function getItemRequirements($id) {
 		$sql = <<<EOD
 SELECT
-	`ql`, `item_ref`, `reqs`
+	`ql`, `ref_low`, `ref_high`, `reqs`
 FROM
 	`best_requirements`
 WHERE
@@ -402,7 +402,7 @@ EOD;
 		}
 		elseif($lowId == count($reqsets)-1) {
 			return Array(	"ql" => $reqsets[$lowId]->ql,
-					"ref_low" => $reqsets[$lowId]->item_ref, "ref_high" => $reqsets[$lowId]->item_ref);
+					"ref_low" => $reqsets[$lowId]->ref_low, "ref_high" => $reqsets[$lowId]->ref_high);
 		}
 		else {
 			return $this->interpolateFromReqSets($reqsets[$lowId], $reqsets[$lowId+1], $sIdx, $sValue);
@@ -421,7 +421,7 @@ EOD;
 	public function interpolateFromReqSets($low, $high, $sIdx, $sValue) {
 		return $low->reqs[$sIdx] > $sValue ? false : 
 			Array(	"ql" => $this->interpolateSkill($low->ql, $low->reqs[$sIdx], $high->ql, $high->reqs[$sIdx], $sValue),
-				"ref_low" => $low->item_ref, "ref_high" => $high->item_ref);
+				"ref_low" => $low->ref_low, "ref_high" => $high->ref_high);
 	}
 	/**
 	 * Interpolate the QL by given skill
@@ -578,7 +578,6 @@ EOD;
 		if($this->settingManager->get("show_no_skills") || !$count) {
 			$count += $c["noskills"];
 		}
-		var_dump($items, $c);
 		return implode("<br><br>", $msg);
 	}
 }
