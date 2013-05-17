@@ -39,7 +39,7 @@ INSERT INTO `best_skills` (`name`, `group`) VALUES ('assaultrifle', 'ranged');
 INSERT INTO `best_skills` (`name`, `group`) VALUES ('rifle', 'ranged');
 INSERT INTO `best_skills` (`name`, `group`) VALUES ('rangedenergy', 'ranged');
 INSERT INTO `best_skills` (`name`, `group`) VALUES ('flingshot', 'ranged');
-INSERT INTO `best_skills` (`name`, `group`) VALUES ('aimshot', 'ranged');
+INSERT INTO `best_skills` (`name`, `group`) VALUES ('aimedshot', 'ranged');
 INSERT INTO `best_skills` (`name`, `group`) VALUES ('burst', 'ranged');
 INSERT INTO `best_skills` (`name`, `group`) VALUES ('fullauto', 'ranged');
 INSERT INTO `best_skills` (`name`, `group`) VALUES ('bowspecial', 'ranged');
