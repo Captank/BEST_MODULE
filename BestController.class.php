@@ -419,9 +419,13 @@ EOD;
 	 * @return array - interpolated QL and item reference, if $sValue is even lower than $low->reqs[$sIdx] then false
 	 */
 	public function interpolateFromReqSets($low, $high, $sIdx, $sValue) {
+		if($low->reqs[$sIdx] > $sValue) {
+			return false;
+		}
+		$ql = $this->interpolateSkill($low->ql, $low->reqs[$sIdx], $high->ql, $high->reqs[$sIdx], $sValue);
 		return $low->reqs[$sIdx] > $sValue ? false : 
-			Array(	"ql" => $this->interpolateSkill($low->ql, $low->reqs[$sIdx], $high->ql, $high->reqs[$sIdx], $sValue),
-				"ref_low" => $low->ref_low, "ref_high" => $high->ref_high);
+			Array(	"ql" => $ql,
+				"ref_low" => $low->ref_low, "ref_high" => $ql == $low->ql ? $low->ref_high : $high->ref_high);
 	}
 	/**
 	 * Interpolate the QL by given skill
